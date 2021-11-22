@@ -43,7 +43,7 @@ public:
 		set_age(age);
 		cout << "HCONSTRUCTOR:\t" << this << endl;
 	}
-	~Human()
+	virtual ~Human()
 	{
 		cout << "HDESTRUCTOR:\t" << this << endl;
 	}
@@ -147,40 +147,39 @@ public:
 		cout << "Специальность: " << speciality << ", стаж работы: " << experience << " лет." << endl;
 	}
 };
-/*class Graduate :public Student
+class Graduate :public Student
 {
-	string subject;
-	double completedwork;
+	string diploma;
 public:
-	const string& subject() const
+	const string& get_diploma()const
 	{
-		return subject;
+		return diploma;
 	}
-	void set_subject(const string& subject)
+	void set_diploma(const string& diploma)
 	{
-		this->subject = subject;
+		this->diploma = diploma;
 	}
-	// Constructor:
-	Graduate(const string& last_name, const string& first_name, unsigned int age,
-		const string& speciality, const string& group, double rating,
-		const string& subject
-	) :Student(last_name, first_name, age,speciality, group, rating)
+	// Constructors:
+	Graduate
+	(
+		const string& last_name, const string& first_name, unsigned int age,
+		const string& speciality, const string& group, double rating, const string& diploma
+	) :Student(last_name, first_name, age, speciality, group, rating)// Делигируем конструктор
 	{
-		set_subject(subject);
-		cout << "GCONSCTRUCTOR:\t" << endl;
+		set_diploma(diploma);
+		cout << "GConstructor:\t" << this << endl;
 	}
 	~Graduate()
 	{
-		cout << "GDESTRUCTOR:\t" << endl;
+		cout << "GDestructor:\t" << this << endl;
 	}
 	// Methods:
 	void print()const
 	{
 		Student::print();
-		cout << "Тема дипломной работы: " << subject << endl;
+		cout << "Тема дипломной работы работы: " << diploma << endl;
 	}
 };
-*/
 //#define inheritance
 void main()
 {
@@ -192,10 +191,8 @@ void main()
 	s.print();
 	Teacher t("Loockman", "Jason", 45, "Teacher", 15);
 	t.print();
-#ifdef DEBUG
 	Graduate g("Dickson", "J", 25, "Cryminalistic", "Graduate", "FF_03", 80, "How to catch Heisenberg");
-	g.print();
-#endif // DEBUG  
+	g.print(); 
 #endif // inheritance
 	Human* group[] =
 	{
@@ -211,5 +208,10 @@ void main()
 			group[i]->print();
 	}
 	cout << "\n----------------------------------------\n";
+
+	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
+	{
+		delete[] group[i];
+	}
 
 }
