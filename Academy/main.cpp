@@ -48,11 +48,16 @@ public:
 		cout << "HDESTRUCTOR:\t" << this << endl;
 	}
 	//      METHODS:
-	virtual void print()const
+	virtual ostream& print(ostream& os)const
 	{
-		cout << last_name << " " << first_name << " " << age << " лет.\n";
+		return os << last_name << " " << first_name << " " << age << " лет";
 	}
 };
+ostream& operator <<(ostream& os, const Human& obj)
+{
+	return obj.print(os);
+	
+}
 class Student :public Human
 {
 	string speciality;
@@ -98,10 +103,10 @@ public:
 		cout << "SDESTRUCTOR:\t" << this << endl;
 	}
 	// Methods:
-	void print()const
+	ostream& print(ostream& os)const
 	{
-		Human::print();
-		cout << "Специальность: " << speciality << ", группа: " << group << ", успеваемость: " << rating << endl;
+		Human::print(os);
+		return os << "Специальность: " << speciality << ", группа: " << group << ", успеваемость: " << rating;
 	}
 
 };
@@ -141,10 +146,10 @@ public:
 	{
 		cout << "TDestructor:\t" << this << endl;
 	}
-	void print()const
+	ostream& print(ostream& os)const
 	{
-		Human::print();
-		cout << "Специальность: " << speciality << ", стаж работы: " << experience << " лет." << endl;
+		Human::print(os);
+		return os << ", Специальность: " << speciality << " , стаж работы: " << experience << " лет.";
 	}
 };
 class Graduate :public Student
@@ -173,11 +178,11 @@ public:
 	{
 		cout << "GDestructor:\t" << this << endl;
 	}
-	// Methods:
-	void print()const
+	// Methods:	
+	ostream& print(ostream& os)const
 	{
-		Student::print();
-		cout << "Тема дипломной работы работы: " << diploma << endl;
+		Student::print(os);
+		return os << "Тема дипломной работы работы: " << diploma;
 	}
 };
 //#define inheritance
@@ -205,7 +210,8 @@ void main()
 	for (int i = 0; i < sizeof(group) / sizeof(Human*);i++)
 	{
 		cout << "\n---------------------------------------\n";
-			group[i]->print();
+			//group[i]->print();
+		cout << *group[i] << endl;
 	}
 	cout << "\n----------------------------------------\n";
 
