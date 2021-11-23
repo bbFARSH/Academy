@@ -18,5 +18,31 @@
     <ClCompile Include="main.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
+    <ClCompile Include="Human.cpp">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
+    <ClCompile Include="Student.cpp">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
+    <ClCompile Include="Teacher.cpp">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
+    <ClCompile Include="Graduate.cpp">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Human.h">
+      <Filter>Файлы ресурсов</Filter>
+    </ClInclude>
+    <ClInclude Include="Student.h">
+      <Filter>Файлы ресурсов</Filter>
+    </ClInclude>
+    <ClInclude Include="Teacher.h">
+      <Filter>Файлы ресурсов</Filter>
+    </ClInclude>
+    <ClInclude Include="Graduate.h">
+      <Filter>Файлы ресурсов</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
