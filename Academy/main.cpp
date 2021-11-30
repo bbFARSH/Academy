@@ -1,25 +1,26 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 using std::cout;
 using std::cin;
 using std::endl;
 using namespace std;
-
+#define tab "\t"
 class Human
 {
 	string last_name;
-    string first_name;
+	string first_name;
 	unsigned int age;
 public:
-	const string& get_last_name() const
+	const string& get_last_name()const
 	{
 		return last_name;
 	}
-	const string& get_first_name() const
+	const string& get_first_name()const
 	{
 		return first_name;
 	}
-	unsigned int get_age() const
+	unsigned int get_age()const
 	{
 		return age;
 	}
@@ -35,28 +36,70 @@ public:
 	{
 		this->age = age;
 	}
-	 // Constructor:
+	//Constructors:
 	Human(const string& last_name, const string& first_name, unsigned int age)
 	{
 		set_last_name(last_name);
 		set_first_name(first_name);
 		set_age(age);
-		cout << "HCONSTRUCTOR:\t" << this << endl;
+		cout << "HConstructor:\t" << this << endl;
 	}
-	virtual ~Human()
+	virtual~Human()
 	{
-		cout << "HDESTRUCTOR:\t" << this << endl;
+		cout << "HDestructor\t" << this << endl;
 	}
-	//      METHODS:
+	//Methods:
 	virtual ostream& print(ostream& os)const
 	{
-		return os << last_name << " " << first_name << " " << age << " лет";
+		//return os << last_name << " " << first_name << " " << age << " лет";
+		os.width(10);
+		os << std::left;
+		os << last_name;
+		os.width(10);
+		os << std::left;
+		os << first_name;
+		os.width(5);
+		os << age;
+		return os;
+	}
+	virtual ofstream& print(ofstream& os)const
+	{
+		//return os << last_name << " " << first_name << " " << age << " лет";
+		os.width(15);
+		os << left;
+		os << typeid(*this).name() << " | ";
+		os << std::left;
+		os << last_name << "|";
+		os.width(10);
+		os << std::left;
+		os << first_name << "|";
+		os.width(5);
+		os << age << "|";
+		return os;
+	}
+	virtual istream& input(istream& is)
+	{
+		return is >> last_name >> first_name >> age;
 	}
 };
 ostream& operator <<(ostream& os, const Human& obj)
 {
+	return obj.print(os	);
+}
+ofstream& operator <<(ofstream& os, const Human& obj)
+{
 	return obj.print(os);
-	
+}
+istream& operator >>(istream& is, Human& obj)
+{
+	/*string last_name, first_name;
+	int age;
+	is >> last_name >> first_name >> age;
+	obj.set_last_name(last_name);
+	obj.set_first_name(first_name);
+	obj.set_age(age);
+	return is;*/
+	return obj.input(is);
 }
 class Student :public Human
 {
@@ -64,7 +107,7 @@ class Student :public Human
 	string group;
 	double rating;
 public:
-	const string& get_speciality() const
+	const string& get_speciality()const
 	{
 		return speciality;
 	}
@@ -72,11 +115,12 @@ public:
 	{
 		return group;
 	}
+
 	double get_rating()const
 	{
 		return rating;
 	}
-	void set_speciality(const string& speaciality)
+	void set_speciality(const string& speciality)
 	{
 		this->speciality = speciality;
 	}
@@ -88,25 +132,66 @@ public:
 	{
 		this->rating = rating;
 	}
-	// Constructor:
+	//Constuctors:
+
 	Student(const string& last_name, const string& first_name, unsigned int age,
-	     	const string& speciality, const string& group, double rating
-	):Human(last_name, first_name, age)
+		const string& speciality, const string& group, double rating)
+		:Human(last_name, first_name, age)//Делегируем конструктор базового класса
 	{
 		set_speciality(speciality);
 		set_group(group);
 		set_rating(rating);
-		cout << "SCONSCTRUCTOR:\t" << this << endl;
+		cout << "SConstructor:\t" << this << endl;
 	}
+
 	~Student()
 	{
-		cout << "SDESTRUCTOR:\t" << this << endl;
+		cout << "SDestructor:\t" << this << endl;
 	}
-	// Methods:
+	// METHODS
 	ostream& print(ostream& os)const
 	{
 		Human::print(os);
-		return os << "Специальность: " << speciality << ", группа: " << group << ", успеваемость: " << rating;
+		//os << tab;
+		//return os /*<< "Специальность: " */<< speciality << tab/*<< ", группа: "*/ << group /*<< ", успеваемость: " */<< rating;
+		os.width(25);
+		os << left;
+		os << speciality;
+		os.width(8);
+		os << left;
+		os << group;
+		os.width(5);
+		//os << right;
+		os << internal;
+		os << rating;
+		os << "% |";
+		return os;
+	}
+	ofstream& print(ofstream& os)const
+	{
+		Human::print(os);
+		//os << tab;
+		//return os /*<< "Специальность: " */<< speciality << tab/*<< ", группа: "*/ << group /*<< ", успеваемость: " */<< rating;
+		os.width(25);
+		os << left;
+		os << speciality << "|";
+		os.width(8);
+		os << left;
+		os << group << "|";
+		os.width(5);
+		//os << right;
+		os << internal;
+		os << rating;
+		os << "% |";
+		return os;
+	}
+	istream& input(istream& is)
+	{
+		Human::input(is);
+		is >> speciality;
+		is >> group;
+		is >> rating;
+		return is;
 	}
 
 };
@@ -146,10 +231,27 @@ public:
 	{
 		cout << "TDestructor:\t" << this << endl;
 	}
-	ostream& print(ostream& os)const
+	virtual ostream& print(ostream& os)const
 	{
 		Human::print(os);
-		return os << ", Специальность: " << speciality << " , стаж работы: " << experience << " лет.";
+		//return os /*<< ", Специальность: "*/ << speciality /*<< " , стаж работы: " */<< experience << " лет.";
+		os.width(33);
+		os << speciality;
+		os.width(5);
+		os << right;
+		os << experience << "y";
+		return os;
+	}
+	virtual ofstream& print(ofstream& os)const
+	{
+		Human::print(os);
+		//return os /*<< ", Специальность: "*/ << speciality /*<< " , стаж работы: " */<< experience << " лет.";
+		os.width(33);
+		os << speciality << " | ";
+		os.width(5);
+		os << right;
+		os << experience << "y|";
+		return os;
 	}
 };
 class Graduate :public Student
@@ -182,10 +284,22 @@ public:
 	ostream& print(ostream& os)const
 	{
 		Student::print(os);
-		return os << "Тема дипломной работы работы: " << diploma;
+		//return os /*<< "Тема дипломной работы работы: " */<< diploma;
+		return os << left << " " << diploma;
+	}
+	ofstream& print(ofstream& os)const
+	{
+		Student::print(os);
+		//return os /*<< "Тема дипломной работы работы: " */<< diploma;
+	   os << left << " " << diploma;
+	   return os;
 	}
 };
+void SaveToFile(const Human* group[], const int size, const string& filename);
+Human** LoadFromFile(const std::string& filename);
 //#define inheritance
+//#define output_check
+
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -197,27 +311,92 @@ void main()
 	Teacher t("Loockman", "Jason", 45, "Teacher", 15);
 	t.print();
 	Graduate g("Dickson", "J", 25, "Cryminalistic", "Graduate", "FF_03", 80, "How to catch Heisenberg");
-	g.print(); 
+	g.print();
 #endif // inheritance
-	Human* group[] =
+#ifdef output_check
+	const Human* group[] =
 	{
-		new Student("Pickman", "Jessie", 22, "Chemistry", "WW_01", 98),//upcast
+	new Student("Pickman", "Jessie", 22, "Chemistry", "WW_01", 98),//upcast
 	new Student("Loockman", "Jason", 45, "Teacher", "Vice", 90),//upcast
 	new Teacher("White","Walter", 50, "Chemistry", 25),//upcast
-	new Student("Diaz", "Ricardo", 55, "Weapons distrubution","Vice", 80),//upcast
+	new Student("Diaz", "Ricardo", 55, "Weapons distrubution","Vice", 80),
+	new Graduate("Shrader", "Hank", 42,"Cryminalistic", "OBN", 95, "How to catch Heisenberg"),//upcast
 	new Teacher("Einstein", "Albert",142,"Astronomy", 120)//upcast
 	};
-	for (int i = 0; i < sizeof(group) / sizeof(Human*);i++)
+	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 	{
 		cout << "\n---------------------------------------\n";
-			//group[i]->print();
+		//group[i]->print();
 		cout << *group[i] << endl;
 	}
 	cout << "\n----------------------------------------\n";
-
+	/*ofstream fout("group.txt");
+	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
+	{
+		fout << *group[i] << endl;
+	}
+	fout.close();
+	system("notepad group.txt");*/
+	string filename = "group.txt";
+	SaveToFile(group, sizeof(group) / sizeof(group[0]), "group.txt");
+	system((string("notepad")+filename).c_str());
+	//(string("notepad") - преобразуем строковую константу "нотепад" в объект класса std::string
+	//(string("notepad") +filename - выполняем конкатенацию двух объектов класса std::string
+	//std::string.c_str - метод с_str возвращает содержимое объекта std::string в 
+	//виде обычной NULL Terminate line(c string), то есть в виде массиов элементов char
 	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 	{
 		delete[] group[i];
 	}
+#endif // output_check
+	/*Human human("last_name", "first_name", 0);
+	Student stud("", "", 0, "","", 0);
+	cout << "Кто к нам пришёл: ";
+	cin >> stud;
+	cout << stud << endl;*/
+	LoadFromFile("group.txt");
 
+}
+void SaveToFile(const Human* group[], const int size, const string& filename)
+{
+	ofstream fout(filename);
+	for (int i = 0; i < size; i++)
+	{
+		fout << *group[i] << endl;
+	}
+	fout.close();
+}
+Human** LoadFromFile(const std::string& filename)
+{
+	ifstream fin(filename);
+	if (fin.is_open())
+	{
+		///////// 1 действие - вычислияем размер файла
+		std::string buffer; // в этот буфер будем читать строки из файла
+		int n = 0; // количество строк в файле
+		while (!fin.eof())
+		{
+			std::getline(fin, buffer);
+			cout << fin.tellg() << endl;
+			n++;
+		}
+		///////// 2 действие - выделяем память под массив группу
+		Human** group = new Human*[n] {};
+	    ////////// 3 действие - возвращаемся курсор в начало файла, для того чтобы заново его прочитать
+		fin.clear();
+		fin.seekg(ios::beg, 0);
+		cout << fin.tellg() << endl;
+		////////// 4 - заново читаем файл, загружаем его содержимое в массив объектов
+		for (int i = 0; i < n; i++)
+		{
+			std::getline(fin, buffer);
+			cout << buffer << endl;
+		}
+		fin.close();
+	}
+	else
+	{
+		cerr << "Error: File not found!" << endl;
+	}
+	return nullptr;
 }
